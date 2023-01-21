@@ -169,43 +169,6 @@ const addLoader = () => {
   </div>`;
 };
 
-const goToLogin = () => {
-  const pageLogin = document.querySelector('.page-login');
-  const body = document.querySelector('body');
-
-  if (pageLogin !== undefined) {
-    pageLogin.innerHTML = `
-      <img src="assets/login-logo.png" alt="Bate papo UOL" />
-
-      <main>
-        <input
-          type="text"
-          class="input-name"
-          placeholder="Digite seu nome"
-          data-test="input-name"
-        />
-        <button data-test="send-name" onclick="login()">Entrar</button>
-      </main>
-    `;
-  } else {
-    body.innerHTML = `
-      <div class="page-login">
-        <img src="assets/login-logo.png" alt="Bate papo UOL" />
-
-        <main>
-          <input
-            type="text"
-            class="input-name"
-            placeholder="Digite seu nome"
-            data-test="input-name"
-          />
-          <button data-test="send-name" onclick="login()">Entrar</button>
-        </main>
-      </div>
-    `;
-  }
-};
-
 const createMessages = () => {
   const messagesList = document.querySelector('main');
 
@@ -318,6 +281,14 @@ const goToChat = () => {
     </div>
   `;
 
+  document
+    .querySelector('.input-message')
+    .addEventListener('keyup', function (event) {
+      if (event.code === 'Enter') {
+        sendMessage();
+      }
+    });
+
   loadMessages();
   createTimerToLoadMessages();
 };
@@ -340,3 +311,11 @@ const login = async () => {
     window.location.reload();
   }
 };
+
+document
+  .querySelector('.input-name')
+  .addEventListener('keyup', function (event) {
+    if (event.code === 'Enter') {
+      login();
+    }
+  });
