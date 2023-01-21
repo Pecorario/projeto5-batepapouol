@@ -19,7 +19,7 @@ const createTimerToDwellTime = () => {
 };
 
 const createTimerUsers = () => {
-  idTimerDwellTime = setInterval(() => {
+  idTimerUsers = setInterval(() => {
     loadUsers();
   }, 10000);
 };
@@ -190,12 +190,14 @@ const createMessages = () => {
       </div>
       `);
     }
-    return (messagesList.innerHTML += `
-    <div class="message" data-test="message">
-      <span>(${message.time})</span>&nbsp<strong>${message.from}</strong> para
-      <strong>${message.to}:</strong>&nbsp${message.text}
-    </div>
-    `);
+    if (message.type === 'message') {
+      return (messagesList.innerHTML += `
+        <div class="message" data-test="message">
+          <span>(${message.time})</span>&nbsp<strong>${message.from}</strong> para
+          <strong>${message.to}:</strong>&nbsp${message.text}
+        </div>
+      `);
+    }
   });
 
   const lastMessage = document.querySelector('.message:last-child');
@@ -305,7 +307,11 @@ const login = async () => {
     nickname = inputName;
 
     goToChat();
+
+    stillHere();
     createTimerToDwellTime();
+
+    loadUsers();
     createTimerUsers();
   } catch (error) {
     window.location.reload();
