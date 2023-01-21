@@ -284,7 +284,8 @@ const goToChat = () => {
   document
     .querySelector('.input-message')
     .addEventListener('keyup', function (event) {
-      if (event.code === 'Enter') {
+      alert('Tecla clicada: ', event.code);
+      if (event.code === 'Enter' || event.code === 'Ir') {
         sendMessage();
       }
     });
