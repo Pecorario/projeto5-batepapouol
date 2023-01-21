@@ -19,25 +19,26 @@
     <link rel="shortcut icon" href="assets/icon.jpeg" type="image/x-icon" />
   </head>
   <body>
-    <div class="page-login hidden">
+    <div class="page-login">
       <img src="assets/login-logo.png" alt="Bate papo UOL" />
 
-      <div class="loading hidden">
+      <!-- <div class="loading hidden">
         <span class="loader"></span>
         <p>Entrando...</p>
-      </div>
+      </div> -->
 
       <main>
         <input
           type="text"
           placeholder="Digite seu nome"
+          class="input-name"
           data-test="input-name"
         />
-        <button data-test="send-name">Entrar</button>
+        <button data-test="send-name" onclick="login()">Entrar</button>
       </main>
     </div>
-
-    <div class="page-chat">
+    <!-- 
+    <div class="page-chat hidden">
       <div class="right-drawer hidden" data-test="overlay">
         <div class="background"></div>
         <div class="content">
@@ -115,8 +116,10 @@
           data-test="send-message"
         ></ion-icon>
       </footer>
-    </div>
+    </div> -->
 
     <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="script.js"></script>
   </body>
 </html>
