@@ -187,8 +187,6 @@ strong {
   font-size: 14px;
   line-height: 20px;
   padding: 10px;
-
-  background: #FFF;
 }
 
 .page-chat main .message.status {
@@ -197,6 +195,11 @@ strong {
 
 .page-chat main .message.privately {
   background: #FFDEDE;
+}
+
+.page-chat main .message.default {
+  background: #FFF;
+
 }
 
 .page-chat main .message span {
