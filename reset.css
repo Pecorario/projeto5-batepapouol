@@ -62,3 +62,7 @@ table {
 a {
   text-decoration: none;
 }
+
+input:focus{
+	outline: none;
+}

@@ -12,50 +12,108 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap"
       rel="stylesheet"
     />
 
     <link rel="shortcut icon" href="assets/icon.jpeg" type="image/x-icon" />
   </head>
   <body>
-    <div class="page-login">
+    <div class="page-login hidden">
       <img src="assets/login-logo.png" alt="Bate papo UOL" />
 
-      <div class="loading">
+      <div class="loading hidden">
         <span class="loader"></span>
         <p>Entrando...</p>
       </div>
 
-      <main class="hidden">
-        <input type="text" placeholder="Digite seu nome" />
-        <button>Entrar</button>
+      <main>
+        <input
+          type="text"
+          placeholder="Digite seu nome"
+          data-test="input-name"
+        />
+        <button data-test="send-name">Entrar</button>
       </main>
     </div>
 
-    <div class="page-chat hidden">
+    <div class="page-chat">
+      <div class="right-drawer hidden" data-test="overlay">
+        <div class="background"></div>
+        <div class="content">
+          <h2>Escolha um contato para enviar mensagem:</h2>
+          <ul class="people">
+            <li data-test="all">
+              <ion-icon name="people" class="icon-people"></ion-icon>Todos
+            </li>
+            <li data-test="participant">
+              <ion-icon name="person-circle" class="icon-person"></ion-icon>João
+            </li>
+            <li data-test="participant" class="selected">
+              <ion-icon name="person-circle" class="icon-person"></ion-icon
+              >Maria
+              <div class="container-check" data-test="check">
+                <ion-icon name="checkmark-sharp" class="icon-check"></ion-icon>
+              </div>
+            </li>
+          </ul>
+
+          <h2>Escolha a visibilidade:</h2>
+          <ul class="visibility">
+            <li class="public" data-test="public">
+              <ion-icon name="lock-open" class="icon-unlocked"></ion-icon
+              >Público
+            </li>
+            <li class="private selected" data-test="private">
+              <ion-icon name="lock-closed" class="icon-locked"></ion-icon
+              >Reservadamente
+              <div class="container-check" data-test="check">
+                <ion-icon name="checkmark-sharp" class="icon-check"></ion-icon>
+              </div>
+            </li>
+          </ul>
+        </div>
+      </div>
+
       <header>
         <img src="assets/logo.png" alt="Bate papo UOL" />
-        <ion-icon name="people" class="icon-people"></ion-icon>
+        <ion-icon
+          name="people"
+          class="icon-people"
+          data-test="open-participants"
+        ></ion-icon>
       </header>
 
       <main>
-        <div class="message">
+        <div class="message" data-test="message">
           <span>(09:21:45)</span>&nbsp<strong>João</strong> para
           <strong>Todos:</strong> Bom dia
         </div>
-        <div class="message privately">
+        <div class="message privately" data-test="message">
           <span>(09:21:45)</span>&nbsp<strong>João</strong> reservadamente para
           <strong>Maria:</strong> Oi gatinha quer tc?
         </div>
-        <div class="message status">
+        <div class="message status" data-test="message">
           <span>(09:22:58)</span>&nbsp<strong>João</strong> sai da sala...
         </div>
       </main>
 
       <footer>
-        <input type="text" placeholder="Escreva aqui..." />
-        <ion-icon name="paper-plane-outline" class="icon-message"></ion-icon>
+        <div class="container-input">
+          <input
+            type="text"
+            placeholder="Escreva aqui..."
+            data-test="input-message"
+          />
+          <span data-test="recipient"
+            >Enviando para Maria (reservadamente)</span
+          >
+        </div>
+        <ion-icon
+          name="paper-plane-outline"
+          class="icon-message"
+          data-test="send-message"
+        ></ion-icon>
       </footer>
     </div>
 
