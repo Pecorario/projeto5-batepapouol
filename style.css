@@ -278,20 +278,22 @@ strong {
   z-index: 5;
 
   display: flex;
-
 }
 
 .right-drawer .background {
   flex: 1;
+  width: 0;
   background: rgba(0, 0, 0, 0.6);
+
+  overflow-x: hidden;
+  transition: 0.5s;
 }
 
 .right-drawer .content {
-  width: 69.06vw;
+  /* width: 69.06vw; */
+  width: 0;
   max-width: 400px;
-
   padding: 20px 18px;
-
   background: #FFF;
 }
 
