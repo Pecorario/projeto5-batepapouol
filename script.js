@@ -138,24 +138,19 @@ const loadUsers = async () => {
 };
 
 const openRightDrawer = () => {
-  const rightDrawer = document.querySelector('.right-drawer');
-  const rightDrawerBackground = document.querySelector(
-    '.right-drawer .background'
-  );
-  const rightDrawerContent = document.querySelector('.right-drawer .content');
   const page = document.querySelector('.page-chat');
+  const rightDrawer = document.querySelector('.right-drawer');
 
-  rightDrawer.classList.remove('hidden');
-  rightDrawerContent.style.width = '69.06vw';
   page.style.overflow = 'hidden';
+  rightDrawer.classList.remove('hidden');
 };
 
 const closeRightDrawer = () => {
-  const rightDrawer = document.querySelector('.right-drawer');
   const page = document.querySelector('.page-chat');
+  const rightDrawer = document.querySelector('.right-drawer');
 
-  rightDrawer.classList.add('hidden');
   page.style.overflow = 'auto';
+  rightDrawer.classList.add('hidden');
 };
 
 const addLoader = () => {

@@ -71,10 +71,6 @@ strong {
   background: #E7E7E7;
 }
 
-.page-login button:hover {
-  cursor: pointer;
-}
-
 .loading {
   display: flex;
   flex-direction: column;
@@ -260,10 +256,6 @@ strong {
   font-size: 32px;
 }
 
-.page-chat footer .icon-message:hover {
-  cursor: pointer;
-}
-
 .page-chat ::placeholder {
   font-style: italic;
   color: #000;
@@ -284,17 +276,25 @@ strong {
   flex: 1;
   width: 0;
   background: rgba(0, 0, 0, 0.6);
-
-  overflow-x: hidden;
-  transition: 0.5s;
 }
 
 .right-drawer .content {
-  /* width: 69.06vw; */
-  width: 0;
+  width: 69.06vw;
   max-width: 400px;
   padding: 20px 18px;
   background: #FFF;
+
+  -webkit-animation: openRightDrawer .4s ease-in;
+  -webkit-animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes openRightDrawer {
+  0% {
+    width: 0px;
+  }
+  100% {
+    width: 69.06vw;
+  }
 }
 
 .right-drawer .content h2 {
@@ -341,4 +341,9 @@ strong {
 .right-drawer .selected .icon-check {
   font-size: 12px;
   color: #28BB25;
+}
+
+.page-login button:hover, .page-chat footer .icon-message:hover,
+.page-chat header .icon-people {
+  cursor: pointer;
 }
