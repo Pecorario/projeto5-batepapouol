@@ -284,7 +284,7 @@ const goToChat = () => {
   document
     .querySelector('.input-message')
     .addEventListener('keyup', function (event) {
-      if (event.code === 'Enter') {
+      if (event.code === 'Enter' || event.key === 'Enter') {
         sendMessage();
       }
     });
@@ -319,11 +319,7 @@ const login = async () => {
 document
   .querySelector('.input-name')
   .addEventListener('keyup', function (event) {
-    document.querySelector(
-      'body main'
-    ).innerHTML += `code: ${event.code} key: ${event.key} keyCode: ${event.keyCode};`;
-
-    if (event.code === 'Enter') {
+    if (event.code === 'Enter' || event.key === 'Enter') {
       login();
     }
   });
