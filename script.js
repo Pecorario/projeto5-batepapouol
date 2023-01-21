@@ -284,8 +284,7 @@ const goToChat = () => {
   document
     .querySelector('.input-message')
     .addEventListener('keyup', function (event) {
-      alert('Tecla clicada: ', event.code);
-      if (event.code === 'Enter' || event.code === 'Ir') {
+      if (event.code === 'Enter') {
         sendMessage();
       }
     });
@@ -320,6 +319,10 @@ const login = async () => {
 document
   .querySelector('.input-name')
   .addEventListener('keyup', function (event) {
+    document.querySelector(
+      'body main'
+    ).innerHTML += `code: ${event.code} key: ${event.key} keyCode: ${event.keyCode};`;
+
     if (event.code === 'Enter') {
       login();
     }
