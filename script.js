@@ -170,7 +170,10 @@ const createMessages = () => {
   messagesList.innerHTML = ``;
 
   messages.map(message => {
-    if (message.type === 'private_message' && message.to === nickname) {
+    if (
+      message.type === 'private_message' &&
+      (message.to === nickname || message.from === nickname)
+    ) {
       return (messagesList.innerHTML += `
         <div class="message privately" data-test="message">
           <span>(${message.time})</span>&nbsp<strong>${message.from}</strong> reservadamente para
