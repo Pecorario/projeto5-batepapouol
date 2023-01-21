@@ -1,8 +1,10 @@
 let messages = [];
 let users = [];
+
 let to = 'Todos';
 let visibility = 'público';
-let nickname, idTimerMessages, idTimerDwellTime;
+
+let nickname, idTimerMessages, idTimerDwellTime, idTimerUsers;
 
 const createTimerToLoadMessages = () => {
   idTimerMessages = setInterval(() => {
@@ -16,6 +18,12 @@ const createTimerToDwellTime = () => {
   }, 5000);
 };
 
+const createTimerUsers = () => {
+  idTimerDwellTime = setInterval(() => {
+    loadUsers();
+  }, 10000);
+};
+
 const stillHere = async () => {
   try {
     await axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {
@@ -23,7 +31,7 @@ const stillHere = async () => {
     });
   } catch (error) {
     nickname = '';
-    goToLogin();
+    window.location.reload();
   }
 };
 
@@ -47,8 +55,7 @@ const sendMessage = async () => {
 
     document.querySelector('.input-message').value = '';
   } catch (error) {
-    document.querySelector('.input-message').value = '';
-    console.log(error);
+    window.location.reload();
   }
 };
 
@@ -126,13 +133,11 @@ const loadUsers = async () => {
 
     createListOfUsers();
   } catch (error) {
-    console.log(error);
+    window.location.reload();
   }
 };
 
 const openRightDrawer = () => {
-  loadUsers();
-
   const rightDrawer = document.querySelector('.right-drawer');
   const rightDrawerBackground = document.querySelector(
     '.right-drawer .background'
@@ -207,10 +212,7 @@ const createMessages = () => {
   messagesList.innerHTML = ``;
 
   messages.map(message => {
-    if (
-      message.type === 'private_message' &&
-      (message.from === nickname || message.to === nickname)
-    ) {
+    if (message.type === 'private_message' && message.to === nickname) {
       return (messagesList.innerHTML += `
         <div class="message privately" data-test="message">
           <span>(${message.time})</span>&nbsp<strong>${message.from}</strong> reservadamente para
@@ -247,7 +249,7 @@ const loadMessages = async () => {
 
     createMessages();
   } catch (error) {
-    console.log(error);
+    window.location.reload();
   }
 };
 
@@ -330,10 +332,11 @@ const login = async () => {
     });
 
     nickname = inputName;
+
     goToChat();
     createTimerToDwellTime();
+    createTimerUsers();
   } catch (error) {
-    nickname = '';
-    goToLogin();
+    window.location.reload();
   }
 };
