@@ -57,12 +57,15 @@ const createMessages = () => {
       </div>
       `);
     }
-    return (messagesList.innerHTML += `
+    if (message.type === 'message') {
+      return (messagesList.innerHTML += `
         <div class="message default" data-test="message">
           <span>(${message.time})</span>&nbsp<strong>${message.from}</strong> para
           <strong>${message.to}:</strong>&nbsp${message.text}
         </div>
       `);
+    }
+    return false;
   });
 
   const lastMessage = document.querySelector('.message:last-child');
