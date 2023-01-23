@@ -276,6 +276,9 @@ strong {
   padding: 20px 18px;
   background: #FFF;
 
+  overflow-y: auto;
+  overflow-x: hidden;
+
   -webkit-animation: openRightDrawer .4s ease-in;
   -webkit-animation-fill-mode: forwards;
 }
@@ -305,7 +308,6 @@ strong {
 
 .right-drawer .people {
   margin-bottom: 20px;
-
 }
 
 .right-drawer li {
