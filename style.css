@@ -276,8 +276,8 @@ strong {
   padding: 20px 18px;
   background: #FFF;
 
-  overflow-y: auto;
   overflow-x: hidden;
+  overflow-y: auto;
 
   -webkit-animation: openRightDrawer .4s ease-in;
   -webkit-animation-fill-mode: forwards;
