@@ -278,6 +278,9 @@ strong {
 
   -webkit-animation: openRightDrawer .4s ease-in;
   -webkit-animation-fill-mode: forwards;
+
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 @-webkit-keyframes openRightDrawer {
