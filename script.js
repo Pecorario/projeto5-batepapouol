@@ -1,172 +1,41 @@
 let messages = [];
 let users = [];
 
-let to = 'Todos';
+let recipient = 'Todos';
 let visibility = 'público';
 
-let nickname, idTimerMessages, idTimerDwellTime, idTimerUsers;
+let nickname;
+
+const timeToLoadMessages = 3000;
+const timeToRemainLogged = 5000;
+const timeToLoadUsers = 10000;
+
+const templateCheck = `<div class="container-check" data-test="check"><img src="assets/check.svg" class="icon-check" /></div>`;
+
+document
+  .querySelector('.input-name')
+  .addEventListener('keyup', function (event) {
+    if (event.code === 'Enter' || event.key === 'Enter') {
+      login();
+    }
+  });
+
+const getError = () => window.location.reload();
 
 const createTimerToLoadMessages = () => {
-  idTimerMessages = setInterval(() => {
-    loadMessages();
-  }, 3000);
+  setInterval(loadMessages, timeToLoadMessages);
 };
 
-const createTimerToDwellTime = () => {
-  idTimerDwellTime = setInterval(() => {
-    stillHere();
-  }, 5000);
+const createTimerToRemainLogged = () => {
+  setInterval(remainLogged, timeToRemainLogged);
 };
 
-const createTimerUsers = () => {
-  idTimerUsers = setInterval(() => {
-    loadUsers();
-  }, 10000);
-};
-
-const stillHere = async () => {
-  try {
-    await axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {
-      name: nickname
-    });
-  } catch (error) {
-    nickname = '';
-    window.location.reload();
-  }
-};
-
-const sendMessage = async () => {
-  try {
-    const message = document.querySelector('.input-message').value;
-
-    const newMessage = {
-      from: nickname,
-      to: to,
-      text: message,
-      type: visibility === 'público' ? 'message' : 'private_message'
-    };
-
-    await axios.post(
-      'https://mock-api.driven.com.br/api/v6/uol/messages',
-      newMessage
-    );
-
-    loadMessages();
-
-    document.querySelector('.input-message').value = '';
-  } catch (error) {
-    window.location.reload();
-  }
-};
-
-const selectVisibility = (content, type) => {
-  const selectedVisibility = document.querySelector('.visibility li.selected');
-  const check = document.querySelector('.visibility .container-check');
-
-  if (selectedVisibility !== null) {
-    selectedVisibility.classList.remove('selected');
-    check.remove();
-  }
-
-  const spanMessage = document.querySelector('.recipient');
-  spanMessage.innerText = `Enviando para ${to} (${type})`;
-  visibility = type;
-
-  content.classList.add('selected');
-  content.innerHTML += `
-    <div class="container-check" data-test="check">
-      <ion-icon name="checkmark-sharp" class="icon-check"></ion-icon>
-    </div>
-  `;
-};
-
-const selectTo = (content, receiver) => {
-  const selectedPerson = document.querySelector('.people li.selected');
-  const check = document.querySelector('.people .container-check');
-
-  if (selectedPerson !== null) {
-    selectedPerson.classList.remove('selected');
-    check.remove();
-  }
-
-  const spanMessage = document.querySelector('.recipient');
-  spanMessage.innerText = `Enviando para ${receiver} (${visibility})`;
-  to = receiver;
-
-  content.classList.add('selected');
-  content.innerHTML += `
-    <div class="container-check" data-test="check">
-      <ion-icon name="checkmark-sharp" class="icon-check"></ion-icon>
-    </div>
-  `;
-};
-
-const createListOfUsers = () => {
-  const listOfUsers = document.querySelector('.people');
-
-  listOfUsers.innerHTML = `
-    <li data-test="all" onclick="selectTo(this, 'Todos')" class="selected" >
-      <ion-icon name="people" class="icon-people"></ion-icon>Todos
-      <div class="container-check" data-test="check">
-        <ion-icon name="checkmark-sharp" class="icon-check"></ion-icon>
-      </div>
-    </li>
-  `;
-
-  users.map(
-    user =>
-      (listOfUsers.innerHTML += `
-        <li data-test="participant" onclick="selectTo(this, '${user.name}')">
-          <ion-icon name="person-circle" class="icon-person"></ion-icon>${user.name}
-        </li>
-      `)
-  );
-};
-
-const loadUsers = async () => {
-  try {
-    const response = await axios.get(
-      'https://mock-api.driven.com.br/api/v6/uol/participants'
-    );
-
-    users = response.data;
-
-    createListOfUsers();
-  } catch (error) {
-    window.location.reload();
-  }
-};
-
-const openRightDrawer = () => {
-  const page = document.querySelector('.page-chat');
-  const rightDrawer = document.querySelector('.right-drawer');
-
-  page.style.overflow = 'hidden';
-  rightDrawer.classList.remove('hidden');
-};
-
-const closeRightDrawer = () => {
-  const page = document.querySelector('.page-chat');
-  const rightDrawer = document.querySelector('.right-drawer');
-
-  page.style.overflow = 'auto';
-  rightDrawer.classList.add('hidden');
-};
-
-const addLoader = () => {
-  const pageLogin = document.querySelector('.page-login');
-
-  pageLogin.innerHTML = `<img src="assets/login-logo.png" alt="Bate papo UOL" />
-
-  <div class="loading">
-    <span class="loader"></span>
-    <p>Entrando...</p>
-  </div>`;
+const createTimerToLoadUsers = () => {
+  setInterval(loadUsers, timeToLoadUsers);
 };
 
 const createMessages = () => {
   const messagesList = document.querySelector('main');
-
   messagesList.innerHTML = ``;
 
   messages.map(message => {
@@ -188,18 +57,35 @@ const createMessages = () => {
       </div>
       `);
     }
-    if (message.type === 'message') {
-      return (messagesList.innerHTML += `
+    return (messagesList.innerHTML += `
         <div class="message default" data-test="message">
           <span>(${message.time})</span>&nbsp<strong>${message.from}</strong> para
           <strong>${message.to}:</strong>&nbsp${message.text}
         </div>
       `);
-    }
   });
 
   const lastMessage = document.querySelector('.message:last-child');
   lastMessage.scrollIntoView();
+};
+
+const createListOfUsers = () => {
+  const listOfUsers = document.querySelector('.people');
+
+  listOfUsers.innerHTML = `
+    <li data-test="all" onclick="selectRecipient(this, 'Todos')" class="selected" >
+      <ion-icon name="people" class="icon-people"></ion-icon>Todos${templateCheck}
+    </li>
+  `;
+
+  users.forEach(
+    user =>
+      (listOfUsers.innerHTML += `
+        <li data-test="participant" onclick="selectRecipient(this, '${user.name}')">
+          <ion-icon name="person-circle" class="icon-person"></ion-icon>${user.name}
+        </li>
+      `)
+  );
 };
 
 const loadMessages = async () => {
@@ -209,14 +95,26 @@ const loadMessages = async () => {
     );
 
     messages = response.data;
-
     createMessages();
   } catch (error) {
-    window.location.reload();
+    getError();
   }
 };
 
-const goToChat = () => {
+const loadUsers = async () => {
+  try {
+    const response = await axios.get(
+      'https://mock-api.driven.com.br/api/v6/uol/participants'
+    );
+
+    users = response.data;
+    createListOfUsers();
+  } catch (error) {
+    getError();
+  }
+};
+
+const loadChat = () => {
   const body = document.querySelector('body');
 
   body.innerHTML = `
@@ -225,22 +123,15 @@ const goToChat = () => {
         <div class="background" onclick="closeRightDrawer()"></div>
         <div class="content">
           <h2>Escolha um contato para enviar mensagem:</h2>
-          <ul class="people">
-          </ul>
+          <ul class="people"></ul>
 
           <h2>Escolha a visibilidade:</h2>
           <ul class="visibility">
             <li class="public selected" data-test="public" onclick="selectVisibility(this, 'público')">
-              <ion-icon name="lock-open" class="icon-unlocked"></ion-icon
-              >Público
-              <div class="container-check" data-test="check">
-                <ion-icon name="checkmark-sharp" class="icon-check"></ion-icon>
-              </div>
+              <ion-icon name="lock-open" class="icon-unlocked"></ion-icon>Público${templateCheck}
             </li>
             <li class="private" data-test="private" onclick="selectVisibility(this, 'reservadamente')">
-              <ion-icon name="lock-closed" class="icon-locked"></ion-icon
-              >Reservadamente
-              
+              <ion-icon name="lock-closed" class="icon-locked"></ion-icon>Reservadamente
             </li>
           </ul>
         </div>
@@ -256,8 +147,7 @@ const goToChat = () => {
         ></ion-icon>
       </header>
 
-      <main>
-      </main>
+      <main></main>
 
       <footer>
         <div class="container-input">
@@ -268,8 +158,7 @@ const goToChat = () => {
             data-test="input-message"
           />
           <span data-test="recipient" class="recipient"
-            >Enviando para ${to} (${visibility})</span
-          >
+            >Enviando para ${recipient} (${visibility})</span>
         </div>
         <ion-icon
           name="paper-plane-outline"
@@ -293,9 +182,111 @@ const goToChat = () => {
   createTimerToLoadMessages();
 };
 
-const login = async () => {
-  const inputName = document.querySelector('.input-name').value;
+const remainLogged = async () => {
   try {
+    await axios.post('https://mock-api.driven.com.br/api/v6/uol/status', {
+      name: nickname
+    });
+  } catch (error) {
+    alert('Você foi deslogado.');
+    getError();
+  }
+};
+
+const refreshRecipientSpan = () => {
+  const spanMessage = document.querySelector('.recipient');
+  spanMessage.innerText = `Enviando para ${recipient} (${visibility})`;
+};
+
+const selectVisibility = (content, type) => {
+  const selectedVisibility = document.querySelector('.visibility li.selected');
+  const check = document.querySelector('.visibility .container-check');
+
+  if (selectedVisibility !== null) {
+    selectedVisibility.classList.remove('selected');
+    check.remove();
+  }
+
+  visibility = type;
+
+  content.classList.add('selected');
+  content.innerHTML += templateCheck;
+
+  refreshRecipientSpan();
+};
+
+const selectRecipient = (content, receiver) => {
+  const selectedPerson = document.querySelector('.people li.selected');
+  const check = document.querySelector('.people .container-check');
+
+  if (selectedPerson !== null) {
+    selectedPerson.classList.remove('selected');
+    check.remove();
+  }
+
+  recipient = receiver;
+
+  content.classList.add('selected');
+  content.innerHTML += templateCheck;
+
+  refreshRecipientSpan();
+};
+
+const sendMessage = async () => {
+  try {
+    const message = document.querySelector('.input-message').value;
+
+    const newMessage = {
+      from: nickname,
+      to: recipient,
+      text: message,
+      type: visibility === 'público' ? 'message' : 'private_message'
+    };
+
+    await axios.post(
+      'https://mock-api.driven.com.br/api/v6/uol/messages',
+      newMessage
+    );
+
+    loadMessages();
+
+    document.querySelector('.input-message').value = '';
+  } catch (error) {
+    alert('Houve um erro ao enviar a mensagem. Você foi deslogado.');
+    getError();
+  }
+};
+
+const openRightDrawer = () => {
+  const page = document.querySelector('.page-chat');
+  const rightDrawer = document.querySelector('.right-drawer');
+
+  page.style.overflow = 'hidden';
+  rightDrawer.classList.remove('hidden');
+};
+
+const closeRightDrawer = () => {
+  const page = document.querySelector('.page-chat');
+  const rightDrawer = document.querySelector('.right-drawer');
+
+  page.style.overflow = 'auto';
+  rightDrawer.classList.add('hidden');
+};
+
+const addLoader = () => {
+  const pageLogin = document.querySelector('.page-login');
+
+  pageLogin.innerHTML = `<img src="assets/login-logo.png" alt="Bate papo UOL" />
+  <div class="loading">
+    <span class="loader"></span>
+    <p>Entrando...</p>
+  </div>`;
+};
+
+const login = async () => {
+  try {
+    const inputName = document.querySelector('.input-name').value;
+
     addLoader();
 
     await axios.post('https://mock-api.driven.com.br/api/v6/uol/participants', {
@@ -304,22 +295,15 @@ const login = async () => {
 
     nickname = inputName;
 
-    goToChat();
+    loadChat();
 
-    stillHere();
-    createTimerToDwellTime();
+    remainLogged();
+    createTimerToRemainLogged();
 
     loadUsers();
-    createTimerUsers();
+    createTimerToLoadUsers();
   } catch (error) {
-    window.location.reload();
+    alert('Nome já em uso. Por favor, escolha outro.');
+    getError();
   }
 };
-
-document
-  .querySelector('.input-name')
-  .addEventListener('keyup', function (event) {
-    if (event.code === 'Enter' || event.key === 'Enter') {
-      login();
-    }
-  });
